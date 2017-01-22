@@ -104,7 +104,7 @@ public class HomeActivity extends AppCompatActivity
         //Ad unit ID: ca-app-pub-3722160390007679/2818771947
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getString(R.string.banner_ad_unit_id));
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))
+        AdRequest adRequest = new AdRequest.Builder()//.addTestDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))
                 .build();
         mInterstitialAd.loadAd(adRequest);
     }
@@ -157,7 +157,7 @@ public class HomeActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else if (mBottomSheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN){
             mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        } else if (busRouteMarkers != null || layerLine != null) {
+        } else if (busRouteMarkers != null || layerLine != null || nearByMarkers != null) {
 
             if (busRouteMarkers != null) {
                 clearMarkers(busRouteMarkers, null);
@@ -169,10 +169,11 @@ public class HomeActivity extends AppCompatActivity
                 layerLine = null;
             }
 
+            if (nearByMarkers != null){
+                clearMarkers(nearByMarkers, null);
+                nearByMarkers = null;
+            }
 
-        } else if (nearByMarkers != null){
-            clearMarkers(nearByMarkers, null);
-            nearByMarkers = null;
         } else if (selectedMarkers != null ){
             clearMarkers(selectedMarkers, null);
             selectedMarkers = null;
