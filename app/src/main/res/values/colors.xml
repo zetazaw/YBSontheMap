@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/a3</color>
+    <color name="colorPrimaryDark">@color/a1</color>
+    <color name="colorAccent">@color/b2</color>
+
+
+
+    <color name="a1">#006359</color>
+    <color name="a2">#00ceb9</color>
+    <color name="a3">#38bdaf</color>
+    <color name="a4">#79e5da</color>
+    <color name="a5">#9efff5</color>
+
+    <color name="b1">#9AE17B</color>
+    <color name="b2">#6BBA62</color>
+    <color name="b3">#307470</color>
+    <color name="b4">#42476D</color>
+
+    <color name="black_alpha_40">#66000000</color>
+    <color name="contentscrim">#846735</color>
+    <color name="expandedTitleColor">#ffffff</color>
+
+</resources>
