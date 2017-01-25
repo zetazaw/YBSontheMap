@@ -46,6 +46,11 @@ dependencies {
 
     compile 'com.github.marcoscgdev:EasyLicensesDialog:2.0.0'
 
+    //compile 'uk.co.chrisjenx:calligraphy:2.2.0'
+
+    compile('org.rabbit-converter.rabbit:rabbit:0.0.3') {
+        exclude group: 'org.json', module: 'json'
+    }
 }
 
 

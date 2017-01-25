@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- licence info -->
-    <string name="ybs">YRTA Open Data License</string>
-    <string name="ybs_licence">Contains information from Yangon Bus Service Public Data Version: 0.1.15 (000115)</string>
+    <string name="ybs" translatable="false">YRTA Open Data License</string>
+    <string name="ybs_licence" translatable="false">Contains information from Yangon Bus Service Public Data Version: 0.1.15 (000115)</string>
 
-    <string name="ybs_licence_full">
+    <string name="ybs_licence_full" translatable="false">
         Contains information from {bus_stops_by_service_000115.tsv, services_000115.geojson}
         accessed on 15 January 2017
         from Yangon Bus Service Public Data Version: 0.1.15 (000115)

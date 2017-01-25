@@ -12,10 +12,11 @@
 
     <ImageView
         android:id="@+id/iv_action_menu"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_margin="@dimen/activity_vertical_margin"
-        android:src="@drawable/ic_action_menu"/>
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="8dp"
+        android:src="@drawable/ic_action_menu"
+        android:contentDescription="" />
 
 
 </android.support.design.widget.CoordinatorLayout>
