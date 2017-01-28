@@ -26,12 +26,12 @@ public class DataUtil {
 
     public static void sort(Context context) {
         //sortData(context);
-        final List<BusStop> busStops = RawUtil.getStops(context);
+        final List<BusStop> busStops = RawUtil.getStops(context, 0);
         findDu(busStops);
     }
 
     private static void sortData(Context context) {
-        final List<BusStop> busStops = RawUtil.getStops(context);
+        final List<BusStop> busStops = RawUtil.getStops(context, 0);
     }
 
     private static void sortData(List<BusStop> busStops){

@@ -2,7 +2,6 @@ package net.konyan.yangonbusonthemap.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 
 /**
  * Created by zeta on 1/26/17.
@@ -18,8 +17,6 @@ public final class MyPref {
         mPref = context.getSharedPreferences("", Context.MODE_PRIVATE);
     }
 
-
-
     public static void putInt(final String key, final int value) {
         if (mPref == null) throw new RuntimeException("must init first ");
 
@@ -33,8 +30,8 @@ public final class MyPref {
     }
 
     public static class Builder{
-
-        public void build(Context context){
+        private Builder(){}
+        public static void build(Context context){
             MyPref.setPref(context);
         }
     }

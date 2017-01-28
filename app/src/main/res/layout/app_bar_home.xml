@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ads = "http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,7 +9,101 @@
     tools:context="net.konyan.yangonbusonthemap.HomeActivity">
 
     <include layout="@layout/content_home" />
-    <include layout="@layout/bottom_sheet_content"/>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView_banner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id2"/>
+
+
+    <!--include
+        layout="@layout/bottom_sheet_content"/-->
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/sheet_bus_stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        app:cardElevation="1dp"
+        app:cardCornerRadius="5dp"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="85dp"
+        app:layout_behavior="@string/bottom_sheet_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin">
+
+                <!--ImageView
+                    android:id="@+id/iv_bus_stop"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="@dimen/cardview_compat_inset_shadow"
+                    android:src="@drawable/point" /-->
+
+                <TextView
+                    android:id="@+id/tv_bus_stop_name"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_name"/>
+
+                <TextView
+                    android:id="@+id/tv_bus_stop_road"
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_bus_stop_name"
+                    android:layout_alignLeft="@id/tv_bus_stop_name"
+                    android:text="@string/app_name"
+                    />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:background="@color/colorPrimary"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rc_buses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+
+        </LinearLayout>
+
+
+
+
+    </android.support.v7.widget.CardView>
+
+    <!--android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/bus_stop"
+        app:fabSize="normal"
+        app:layout_anchor="@id/sheet_bus_stop"
+        app:layout_anchorGravity="top|right" /-->
 
     <ImageView
         android:id="@+id/iv_action_menu"
@@ -17,6 +112,7 @@
         android:padding="8dp"
         android:src="@drawable/ic_action_menu"
         android:contentDescription="" />
+
 
 
 </android.support.design.widget.CoordinatorLayout>

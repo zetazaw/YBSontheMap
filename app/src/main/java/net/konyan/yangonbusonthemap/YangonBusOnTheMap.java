@@ -2,6 +2,8 @@ package net.konyan.yangonbusonthemap;
 
 import android.app.Application;
 
+import com.google.android.gms.ads.MobileAds;
+
 import net.konyan.yangonbusonthemap.util.MyPref;
 
 
@@ -18,6 +20,9 @@ public class YangonBusOnTheMap  extends Application{
                 .setFontAttrId(R.attr.fontPath)
                 .build());*/
 
-        new MyPref.Builder().build(this);
+        MyPref.Builder.build(this);
+
+        //MobileAds.initialize(this, "ca-app-pub-3722160390007679/2818771947");
+        MobileAds.initialize(this, "ca-app-pub-3722160390007679/8865305547");
     }
 }

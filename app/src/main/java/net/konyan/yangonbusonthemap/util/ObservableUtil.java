@@ -1,4 +1,4 @@
-package net.konyan.yangonbusonthemap;
+package net.konyan.yangonbusonthemap.util;
 
 import android.content.Context;
 
@@ -6,6 +6,8 @@ import com.cocoahero.android.geojson.Feature;
 import com.cocoahero.android.geojson.FeatureCollection;
 import com.google.android.gms.maps.model.LatLng;
 
+import net.konyan.yangonbusonthemap.HomeActivity;
+import net.konyan.yangonbusonthemap.R;
 import net.konyan.yangonbusonthemap.model.BusStop;
 import net.konyan.yangonbusonthemap.util.RawUtil;
 
@@ -51,7 +53,9 @@ public class ObservableUtil {
         return Observable.create(new ObservableOnSubscribe<List<BusStop>>() {
             @Override
             public void subscribe(ObservableEmitter<List<BusStop>> e) throws Exception {
-                e.onNext(RawUtil.getStops(context));
+                int lan = MyPref.getInt(HomeActivity.KEY_LANGUAGE, HomeActivity.LANGUAGE_EN);
+                e.onNext(RawUtil.getStops(context, lan));
+
             }
         });
     }
