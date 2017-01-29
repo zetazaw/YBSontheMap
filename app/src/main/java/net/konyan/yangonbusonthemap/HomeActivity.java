@@ -1,15 +1,10 @@
 package net.konyan.yangonbusonthemap;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
@@ -33,7 +28,6 @@ import android.widget.Toast;
 import com.cocoahero.android.geojson.Feature;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -70,8 +64,7 @@ public class HomeActivity extends AppCompatActivity
         OnMapReadyCallback,
         GoogleMap.OnMapClickListener,
         GoogleMap.OnMarkerClickListener,
-        GoogleMap.OnCameraIdleListener,
-        LocationListener {
+        GoogleMap.OnCameraIdleListener {
 
     private final String LOG_TAG = HomeActivity.class.getSimpleName();
 
@@ -88,7 +81,9 @@ public class HomeActivity extends AppCompatActivity
     private final float DEFAULT_ZOOM = 13.8f;
     private final float BUS_ROUTE_ZOOM = 11.5f;
 
-    private final LatLng YANGON = new LatLng(16.8661, 96.1951);
+    //private final LatLng YANGON = new LatLng(16.8661, 96.1951);
+    private final LatLng YANGON_SDG = new LatLng(16.798308, 96.1496143);
+    //sdg 16.798308,96.1496143
 
     private BottomSheetBehavior mBottomSheetBehavior;
     private View bottomSheet;
@@ -104,14 +99,10 @@ public class HomeActivity extends AppCompatActivity
     private GeoJsonLayer layerLine;
 
     private Circle circle;
-    //private Marker mapClickMarker;
 
     private List<Marker> selectedMarkers;
     private List<Marker> nearByMarkers;
     private List<Marker> busRouteMarkers;
-
-    //private InterstitialAd mInterstitialAd;
-    private LocationManager locationManager;
 
     private int currentSelectBus;
 
@@ -130,20 +121,10 @@ public class HomeActivity extends AppCompatActivity
     }
 
     //ads
-    private void ads() {
-        //App ID: ca-app-pub-3722160390007679~8865305547
-        //Ad unit ID: ca-app-pub-3722160390007679/2818771947
-        /*mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(getString(R.string.banner_ad_unit_id));
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))
-                .build();
-        mInterstitialAd.loadAd(adRequest);*/
-    }
-
     public void initBanner() {
         AdView mAdView = (AdView) findViewById(R.id.adView_banner);
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))
+                //.addTestDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))
                 .build();
         mAdView.loadAd(adRequest);
     }
@@ -170,7 +151,6 @@ public class HomeActivity extends AppCompatActivity
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                Log.d(LOG_TAG, "" + i);
                 switch (i) {
                     case R.id.nav_radio_lan_en:
                         language = LANGUAGE_EN;
@@ -186,8 +166,13 @@ public class HomeActivity extends AppCompatActivity
                         break;
                 }
 
+                initData();
+
                 if (nearByMarkers != null) {
                     clearMarkers(nearByMarkers, null);
+                }
+                if (layerLine != null) {
+                    layerLine.removeLayerFromMap();
                 }
                 if (busRouteMarkers != null) {
                     clearMarkers(busRouteMarkers, null);
@@ -267,36 +252,27 @@ public class HomeActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else if (mBottomSheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN) {
             mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        } else if (busRouteMarkers != null && !busRouteMarkers.isEmpty()) {
+            clearMarkers(busRouteMarkers, null);
+            currentSelectBus = -1;
         } else if (layerLine != null) {
             layerLine.removeLayerFromMap();
             layerLine = null;
-
-        } else if (busRouteMarkers != null && !busRouteMarkers.isEmpty()
-                || nearByMarkers != null && !nearByMarkers.isEmpty()
-                ) {
-
-            if (busRouteMarkers != null && !busRouteMarkers.isEmpty()) {
-                clearMarkers(busRouteMarkers, null);
-                currentSelectBus = -1;
-            }
-
+        } else if (nearByMarkers != null && !nearByMarkers.isEmpty()) {
 
             if (nearByMarkers != null && !nearByMarkers.isEmpty()) {
                 clearMarkers(nearByMarkers, null);
             }
 
-
             if (selectedMarkers != null && !selectedMarkers.isEmpty()) {
                 clearMarkers(selectedMarkers, null);
             }
 
+            if (circle != null) {
+                circle.remove();
+            }
 
-        } /*else if (selectedMarkers != null && !selectedMarkers.isEmpty()) {
-            //clearMarkers(selectedMarkers, null);
-        } */ else {
-            /*if (mInterstitialAd.isLoaded()) {
-                mInterstitialAd.show();
-            }*/
+        } else {
             super.onBackPressed();
         }
     }
@@ -362,13 +338,13 @@ public class HomeActivity extends AppCompatActivity
         googleMap.getUiSettings().setCompassEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         googleMap.setOnCameraIdleListener(this);
-        googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+        /*googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
                 initData();
                 Log.d(LOG_TAG, "map loaded");
             }
-        });
+        });*/
 
         googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
@@ -377,18 +353,8 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        cameraUpdate(YANGON_SDG, DEFAULT_ZOOM);
 
-        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-        if (location == null) {
-            cameraUpdate(YANGON, DEFAULT_ZOOM);
-        } else {
-            float distance = distFrom(YANGON.latitude, YANGON.longitude, location.getLatitude(), location.getLongitude());
-            Log.d(LOG_TAG, "from yangon >" + distance);
-            cameraUpdate(new LatLng(location.getLatitude(), location.getLongitude()), DEFAULT_ZOOM);
-        }
 
     }
 
@@ -397,19 +363,13 @@ public class HomeActivity extends AppCompatActivity
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         if (nearByMarkers != null) clearMarkers(nearByMarkers, null);
-        //if (mapClickMarker != null) mapClickMarker.remove();
         if (circle != null) circle.remove();
-
-        String title = getString(R.string.select_point);
-
-        /*mapClickMarker = googleMap.addMarker(setMarker(latLng, title, null,
-                R.drawable.ic_user));*/
 
         circle = googleMap.addCircle(new CircleOptions()
                 .center(latLng)
                 .radius(800)
                 .strokeColor(Color.TRANSPARENT)
-                .fillColor(0x220000FF)//0x10000000
+                .fillColor(0x3338bdaf)//0x10000000 //0x220000FF
                 .strokeWidth(1)
         );
 
@@ -419,21 +379,11 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        /*if (marker.equals(mapClickMarker)) {
-            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-            marker.showInfoWindow();
-            showFoundBusStops(marker.getPosition().latitude, marker.getPosition().longitude, language);
-            return false;
-        }*/
 
         if (selectedMarkers == null) {
             selectedMarkers = new ArrayList<>();
         }
         selectedMarkers.add(marker);
-
-
-        //if (nearByMarkers != null) clearMarkers(nearByMarkers, marker);
-        //if (busRouteMarkers != null) clearMarkers(busRouteMarkers, marker);
 
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         marker.showInfoWindow();
@@ -442,18 +392,21 @@ public class HomeActivity extends AppCompatActivity
     }
 
     //operation start
-    //
     private boolean showFoundBusStops(double lat, double lng, int language) {
 
 
         //// TODO: 1/22/17 language switch with @language param
         String nobus = getString(R.string.message_no_bus_stop);
+        String loading = getString(R.string.message_loading);
 
         if (language == LANGUAGE_MM) {
             nobus = getString(R.string.message_no_bus_stop_mm);
+            loading = getString(R.string.message_loading_mm);
         } else if (language == LANGUAGE_ZG) {
             nobus = getString(R.string.message_no_bus_stop_mm);
             nobus = Rabbit.uni2zg(nobus);
+            loading = getString(R.string.message_loading_mm);
+            loading = Rabbit.uni2zg(loading);
         }
 
 
@@ -461,6 +414,7 @@ public class HomeActivity extends AppCompatActivity
         if (found == null) {
             //data require
             //show message
+            Toast.makeText(this, loading, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (found.size() < 1) {
@@ -521,11 +475,6 @@ public class HomeActivity extends AppCompatActivity
         String roadName = busStop.getRoad_mm();
         String townshipName = busStop.getTownship_mm();
 
-        /*if (language == LANGUAGE_ZG) {
-            busName = Rabbit.uni2zg(busName);
-            roadName = Rabbit.uni2zg(roadName);
-            townshipName = Rabbit.uni2zg(townshipName);
-        }*/
         if (language == LANGUAGE_EN) {
             busName = busStop.getName_en();
             roadName = busStop.getRoad_en();
@@ -783,30 +732,6 @@ public class HomeActivity extends AppCompatActivity
 
             //show message
         }
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        Log.d(LOG_TAG, "loc change" + location.toString());
-        float distFromYgn = distFrom(YANGON.latitude, YANGON.longitude,
-                location.getLatitude(), location.getLongitude());
-        Log.d(LOG_TAG, "dis fro ygn>" + distFromYgn);
-        //showFoundBusStops(location.getLatitude(), location.getLongitude(), SELECTED_LANGUAGE);
-    }
-
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-        Log.d(LOG_TAG, "loc status change" + s);
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-        Log.d(LOG_TAG, "loc enable" + s);
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-        Log.d(LOG_TAG, "loc disable" + s);
     }
 
     @Override

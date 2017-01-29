@@ -7,8 +7,8 @@ android {
         applicationId "net.konyan.yangonbusonthemap"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 2
-        versionName "beta.0.2.1"
+        versionCode 3
+        versionName "beta.0.3.0"
         //testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -45,8 +45,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     compile 'com.github.marcoscgdev:EasyLicensesDialog:2.0.0'
-
-    //compile 'uk.co.chrisjenx:calligraphy:2.2.0'
 
     compile('org.rabbit-converter.rabbit:rabbit:0.0.3') {
         exclude group: 'org.json', module: 'json'

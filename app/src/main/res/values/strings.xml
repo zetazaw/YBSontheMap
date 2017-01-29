@@ -1,9 +1,6 @@
 <resources>
     <string name="app_name">Yangon Bus On The Map</string>
-    <string name="version_name">Beta.0.2.1 info</string>
 
-    <string name="banner_ad_unit_id">ca-app-pub-3722160390007679/2818771947</string>
-    <string name="banner_ad_unit_id2">ca-app-pub-3722160390007679/4744549942</string>
     <string name="message_topic">Updates</string>
 
     <string name="action_settings">Settings</string>
@@ -13,13 +10,14 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="available_buses">Available Buses</string>
     <string name="message_no_bus_stop">No bus stop around here!</string>
     <string name="message_no_bus_stop_mm">ဒီနားမှာ ကားမှတ်တိုင် မတွေ့ပါ!</string>
+    <string name="message_loading">Loading, Please wait!</string>
+    <string name="message_loading_mm">ခေတ္တစောင့်ပါ!</string>
 
-    <string name="ybsonthemap_fb">fb.com/yangonbusonthemap/</string>
+
+
     <string name="select_point">Selected Point</string>
 
 </resources>
